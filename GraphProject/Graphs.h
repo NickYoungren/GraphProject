@@ -13,7 +13,7 @@
 using namespace std;
 
 
-class Graph {
+class Graph {   //declaration of the grpah class with corresponding variables and functions
 public:
     int numVertices;
     unordered_map <int, string> intmap;
@@ -25,10 +25,10 @@ public:
         mapMaker();
     }
 
-    void mapMaker() {
+    void mapMaker() {  //declaration of the map creation function
         string name;
         fstream inFile;
-        inFile.open("C:/GraphProject/random_names_fossbytes.csv");
+        inFile.open("C:/GraphProject/random_names_fossbytes.csv");   //opens csv file containing random names
         srand(time(NULL));
         if (inFile.is_open()) {
             for (int i = 0; i < 25000; i++) {
@@ -42,10 +42,10 @@ public:
             ++count;
             int mult = count / 5000;
             int x = rand() % 10;
-            for (int j = 0; j < x; j++) {
+            for (int j = 0; j < x; j++) {   //for each set of 5000 individuals, it restricts connections to a certain group of people
                 int y = 0;
                 if (mult == 0) {
-                    y = rand() % 10000;
+                    y = rand() % 10000;    //the first 5k are only able to be connected to the first 10k
                 }//so will this
                 else if (mult == 1) {
                     y = rand() % 15000;
@@ -60,14 +60,14 @@ public:
                     y = rand() % 15000 + 10000;
                 }
                 else {
-                    y = rand() % 10000 + 15000;
+                    y = rand() % 10000 + 15000;   //the last 5k are only able to connected to the last 15k
                 }
                 adjList[place->second].push_back(y);
             }
         }
     }
 
-    vector<string> BFSSearch(int src, int destination, bool connected) {
+    vector<string> BFSSearch(int src, int destination, bool connected) {   //uses bfs to return the path of connection is found or closest 9 connections if no connection is found
         vector<int> path;
         vector<string> bfsFriends;
         if(!connected){
@@ -85,7 +85,7 @@ public:
         }
     }
 
-    vector<string> DFSSearch(int src, int destination, bool connected) {
+    vector<string> DFSSearch(int src, int destination, bool connected) {   //uses bfs to return the path of connection is found or closest 9 connections if no connection is found
         vector<string> dfsFriends;
         vector<int> path;
         vector<bool> visited;
@@ -103,7 +103,7 @@ public:
         }
     }
 
-    vector<string> BFSNoConnection(const string& source) {
+    vector<string> BFSNoConnection(const string& source) {   //uses bfs to return a path of the first 9 connections of person 1
         int pos = stringmap[source]; 
         vector<string> bfsFriends;
         set<int> visited;
@@ -115,7 +115,7 @@ public:
             int curr = q.front(); 
             auto p = intmap.find(curr); 
             int position = p->first;
-            if (n > 0 && n < 10) { 
+            if (n > 0 && n < 10) {    //only pushes first 9 connections excluding the source individual
                 bfsFriends.push_back(p->second);
             }
             n++;
@@ -134,7 +134,7 @@ public:
         return bfsFriends;
     }
 
-    vector<string> DFSNoConnection(const string& source) { 
+    vector<string> DFSNoConnection(const string& source) {    //uses dfs to return a path of the first 9 connections of person 1
         int pos = stringmap[source]; 
         vector<string> dfsFriends;
         set<int> visited;
@@ -146,7 +146,7 @@ public:
             int curr = stack.top(); 
             auto p = intmap.find(curr); 
             int position = p->first;
-            if (n > 0 && n < 10) {
+            if (n > 0 && n < 10) {   //only pushes first 9 connections excluding the source individual
                 dfsFriends.push_back(p->second); 
             }
             n++;
