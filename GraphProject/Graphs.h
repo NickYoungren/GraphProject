@@ -104,7 +104,7 @@ public:
     }
 
     vector<string> BFSNoConnection(const string& source) {
-        int pos = stringmap[source];
+        int pos = stringmap[source]; 
         vector<string> bfsFriends;
         set<int> visited;
         queue<int> q;
@@ -112,10 +112,10 @@ public:
         q.push(pos);
         int n = 0;
         while (!q.empty()) {
-            int curr = q.front();
-            auto p = intmap.find(curr);
+            int curr = q.front(); 
+            auto p = intmap.find(curr); 
             int position = p->first;
-            if (n > 0 && n < 10) {
+            if (n > 0 && n < 10) { 
                 bfsFriends.push_back(p->second);
             }
             n++;
@@ -123,19 +123,19 @@ public:
             vector<int> neighbors = adjList.at(position);
             sort(neighbors.begin(), neighbors.begin() + neighbors.size());
             for (int v: neighbors) {
-                if (visited.count(v) == 0) {
+                if (visited.count(v) == 0) { 
                     visited.insert(v);
                     q.push(v);
                 }
             }
-            if(bfsFriends.size()==9)
+            if(bfsFriends.size() == 9) 
                 break;
         }
         return bfsFriends;
     }
 
-    vector<string> DFSNoConnection(const string& source) {
-        int pos = stringmap[source];
+    vector<string> DFSNoConnection(const string& source) { 
+        int pos = stringmap[source]; 
         vector<string> dfsFriends;
         set<int> visited;
         stack<int> stack;
@@ -143,11 +143,11 @@ public:
         stack.push(pos);
         int n = 0;
         while (!stack.empty()) {
-            int curr = stack.top();
-            auto p = intmap.find(curr);
+            int curr = stack.top(); 
+            auto p = intmap.find(curr); 
             int position = p->first;
             if (n > 0 && n < 10) {
-                dfsFriends.push_back(p->second);
+                dfsFriends.push_back(p->second); 
             }
             n++;
             stack.pop();
@@ -158,25 +158,25 @@ public:
                     stack.push(v);
                 }
             }
-            if(dfsFriends.size()==9)
+            if(dfsFriends.size()==9) 
                 break;
         }
         return dfsFriends;
     }
 
-    bool dfsBool(int src, int dest) {
-        set<int> visited;
+    bool dfsBool(int src, int dest) { //explores all vertices from a source using Depth First Search Traversal to check if there is a connection to destination
+        set<int> visited; 
         stack<int> s;
-        visited.insert(src);
+        visited.insert(src); //marks as discovered
         s.push(src);
         while (!s.empty()) {
-            int u = s.top();
+            int u = s.top(); //gets next node to explore from queue
             s.pop();
-            for (auto v: adjList[u]) {
-                if (v == dest) {
+            for (auto v: adjList[u]) { //checks every edge from vertex u
+                if (v == dest) { //if destination vertex is found, return true
                     return true;
                 }
-                if ((visited.find(v) == visited.end())) {
+                if ((visited.find(v) == visited.end())) { //if vertex is not visited, push in stack and mark in visited
                     visited.insert(v);
                     s.push(v);
                 }
@@ -185,19 +185,19 @@ public:
         return false;
     }
 
-    bool bfsBool(int src, int dest) {
+    bool bfsBool(int src, int dest) { //explores all vertices from a source using Breadth First Search Traversal to check if there is a connection to destination
         set<int> visited;
         queue<int> q;
-        visited.insert(src);
+        visited.insert(src); //marks as discovered
         q.push(src);
         while (!q.empty()) {
-            int u = q.front();
+            int u = q.front(); //gets next node to explore from queue
             q.pop();
-            for (auto v: adjList[u]) {
-                if (v == dest) {
+            for (auto v: adjList[u]) { //checks every edge from vertex u
+                if (v == dest) { //if destination vertex is found, return true
                     return true;
                 }
-                if ((visited.find(v) == visited.end())) {
+                if ((visited.find(v) == visited.end())) { //if vertex is not visited, push in queue and mark in visited
                     visited.insert(v);
                     q.push(v);
                 }
@@ -207,44 +207,36 @@ public:
     }
 
     bool DFSPathfinder(int src, int dest, vector<bool> &visited, vector<int> &path){
-        // mark the current node as discovered
-        visited.resize(25000);
-        visited[src] = true;
-        // include the current node in the path
-        path.push_back(src);
-        // if destination vertex is found
-        if (src == dest) {
+        visited.resize(25000); 
+        visited[src] = true; //mark vertex as visited
+        path.push_back(src); //include current vertex in path
+        if (src == dest) { //if destination vertex is found, return true
             return true;
         }
-        // do for every edge (src, i)
-        for (int i: adjList[src]){
-            // if `u` is not yet visited
+        for (int i: adjList[src]){ //checks every edge
             if (!visited[i]){
-                // return true if the destination is found
-                if (DFSPathfinder(i, dest, visited, path)) {
+                if (DFSPathfinder(i, dest, visited, path)) {//if destination is found, return true
                     return true;
                 }
             }
         }
-        // backtrack: remove the current node from the path
-        path.pop_back();
-        // return false if destination vertex is not reachable from src
-        return false;
+        path.pop_back(); //removing current node frm path to backtrack due to recursion
+        return false; //if destinatin is not reachable
     }
 
 
-    vector<int> BFSPathfinder(int & src,int & dest) {
-        set<int> visited;
+    vector<int> BFSPathfinder(int & src,int & dest) { //NEEDS UPDATE BY NICK - I tried
+        set<int> visited; //stores the nodes that have already been visited in bfs traversal
         string temp;
-        vector<int> distance(25000, INT_MAX);
+        vector<int> distance(25000, INT_MAX); //vector of distances between two nodes
         vector<int> path;
-        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> priorityQueue;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> priorityQueue; //gets minimum distance between source and destination
         priorityQueue.push({distance[src] = 0, src});
         while (!priorityQueue.empty()) {
             int i = priorityQueue.top().second;
             long long d = priorityQueue.top().first;
             priorityQueue.pop();
-            if (distance[i] < d)continue;
+            if (distance[i] < d)continue; //if distance to the second value in pair is less than distance to first value in the pair, continue loop
             for (auto j : adjList[i]) {
                 if ((distance[j] > distance[i] + 1) && visited.count(j)==0) {
                     distance[j] = distance[i] + 1;
@@ -261,15 +253,15 @@ public:
     }
 
     vector<string> storePath(vector<int> const &path){
-        vector<string> shortestPath;
+        vector<string> shortestPath; //store all the nodes of path from source to destination
         string temp;
         int stop = 0;
-        int factor = (path.size())/9;
+        int factor = (path.size())/9; //will traverse evenly through the path to produce only 9 nodes
         for (int i = 0; i < path.size()-1; i++) {
-            if(stop < 9) {
+            if(stop < 9) { //will stop after 9 nodes
                 if(i% factor == 0 && i!=0) {
-                    temp = intmap[path.at(i)];
-                    shortestPath.push_back(temp);
+                    temp = intmap[path.at(i)];//converting int to string name
+                    shortestPath.push_back(temp); //pushing name into shortestpath
                     stop++;
                 }
             }
@@ -277,20 +269,20 @@ public:
         return shortestPath;
     }
 
-    void printCompletePath(vector<int> const &path){
-        int counter=0;
+    void printCompletePath(vector<int> const &path){ //determines how many connections between source and destination and prints all nodes between
+        int counter = 0;
         string temp;
         for (int i : path) {
-            if (counter==5){
+            if (counter==5){ // prints five name a line
                 cout << endl;
                 counter=0;
             }
-            temp = intmap[i];
+            temp = intmap[i]; //converts int to string name 
             cout << temp << "-> ";
             counter++;
         }
         cout<< "Done!"<<endl;
-        cout<< "It took " + to_string((path.size()-1)) +" Connections To Link The People You Searched!"<<endl;
+        cout<< "It took " + to_string((path.size()-1)) + " Connections To Link The People You Searched!"<<endl;
     }
 
 };
