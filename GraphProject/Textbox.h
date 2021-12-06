@@ -5,7 +5,7 @@
 
 #define DELETE_KEY 8
 #define ENTER_KEY 13
-#define ESCAPE_KEY 27
+#define ESCAPE_KEY 27   //defines values for key inputs
 
 class Textbox{
 public:
@@ -19,10 +19,10 @@ public:
         textbox.setFillColor(color);
         isSelected=sel;
         if (sel){
-            textbox.setString("_");
+            textbox.setString("_");     //allows user to know where they are typing by showing a "_"
         }
         else{
-            textbox.setString("");
+            textbox.setString("");   //if not selected it goes away
         }
     }
 
@@ -30,7 +30,7 @@ public:
         textbox.setFont(font);
     }
 
-    void setPosition(sf::Vector2f pos){
+    void setPosition(sf::Vector2f pos){     //set font position and text limit of textbox
         textbox.setPosition(pos);
     }
 
@@ -47,7 +47,7 @@ public:
         isSelected = sel;
         if(!sel){
             std::string t = text.str();
-            std::string newT = "";
+            std::string newT = "";              //if selected set the string based on input
             for(int i=0; i<t.length();i++){
                 newT += t[i];
             }
@@ -59,7 +59,7 @@ public:
         return text.str();
     }
 
-    void drawTo(sf::RenderWindow &window){
+    void drawTo(sf::RenderWindow &window){    //draws the textbox to screen
         window.draw(textbox);
     }
 
@@ -68,10 +68,10 @@ public:
             int charTyped = input.text.unicode;
             if(charTyped < 128){
                 if(hasLimit){
-                    if(text.str().length() <= limit){
+                    if(text.str().length() <= limit){       //if selected check limit and run input logic if typing
                         inputLogic(charTyped);
                     }
-                    else if(text.str().length() > limit && charTyped==DELETE_KEY){
+                    else if(text.str().length() > limit && charTyped==DELETE_KEY){ //if delete key pushed then delete the last character
                         deleteLastChar();
                     }
                 }
@@ -89,23 +89,23 @@ private:
     int limit;
 
     void inputLogic(int charTyped){
-        if(charTyped != DELETE_KEY && charTyped != ENTER_KEY && charTyped !=ESCAPE_KEY){
-            text << static_cast<char>(charTyped);
+        if(charTyped != DELETE_KEY && charTyped != ENTER_KEY && charTyped !=ESCAPE_KEY){  //based on input determine what to do with text
+            text << static_cast<char>(charTyped); //if not specified keys then add typed text to string
         }
-        else if(charTyped == DELETE_KEY){
+        else if(charTyped == DELETE_KEY){  //if we are pushing delete then delete last character
             if(text.str().length() > 0){
                 deleteLastChar();
             }
         }
         numCharTyped=text.str().length();
         nameTyped=text.str();
-        textbox.setString(text.str()+"_");
+        textbox.setString(text.str()+"_");  //add string to textbox and then add "_"
     }
 
     void deleteLastChar(){
         std::string t = text.str();
         std::string newT = "";
-        for(int i=0; i < t.length() - 1;i++){
+        for(int i=0; i < t.length() - 1;i++){  //function to delete last character of string when hitting delete key
             newT += t[i];
         }
         text.str("");
